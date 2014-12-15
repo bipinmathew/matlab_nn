@@ -6,34 +6,28 @@ function [response,activation]=nn_feedforward(X,w,nn_structure)
 % assumes network is fully connected.
 
 
-N=length(X);
-K = nn_structure(end);
-if N!=nn_structure(1)
-    error("Neural network must have same number of input nodes as input values in the data");
-endif;
+    N=length(X);
+    K = nn_structure(end);
+    if N!=nn_structure(1)
+        error("Neural network must have same number of input nodes as input values in the data");
+    endif;
 
-L = length(nn_structure);
+    L = length(nn_structure);
 
-activation = zeros(sum(nn_structure),1);
-response   = zeros(sum(nn_structure),1);
+    activation = zeros(sum(nn_structure),1);
+    response   = zeros(sum(nn_structure),1);
 
-disp("Stopped inside nn_feedforward ...\r\n");
-keyboard;
+    ai = [0,cumsum(nn_structure)];
+    ws = 0;
 
-ai = cumsum(nn_structure);
-ws = 1;
+    l=1;
+    activation(1+ai(l):ai(l+1))=X;
 
-l=1;
-activation(1:ai(l))=X;
-
-for l=2:L
-    w_size =  (1+nn_structure(l-1))*nn_structure(l) 
-    activation((1+ai(l-1)):ai(l)) = reshape(w(ws:(ws+(w_size)-1)),nn_structure(l),1+nn_structure(l-1))*
-    ws += (w_size+1);
-    disp("Stopped in main loop.");
+    for l=2:L
+        w_size =  (1+nn_structure(l-1))*nn_structure(l);
+        activation((1+ai(l)):ai(l+1)) = reshape(w((ws+1):(ws+(w_size))),nn_structure(l),1+nn_structure(l-1))*[1;sigmoid(activation((1+ai(l-1)):ai(l)))];
+        ws += w_size;
+    end
+    disp("Stopped after feedforward");
     keyboard;
-end
-
-keyboard;
-
 end
