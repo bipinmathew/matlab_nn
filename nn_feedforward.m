@@ -28,7 +28,7 @@ activation(1:ai(l))=X;
 
 for l=2:L
     w_size =  (1+nn_structure(l-1))*nn_structure(l) 
-    activation((1+ai(l-1)):ai(l)) = reshape(w(ws:(ws+(w_size)-1)),1+nn_structure(l-1),nn_structure(l))*
+    activation((1+ai(l-1)):ai(l)) = reshape(w(ws:(ws+(w_size)-1)),nn_structure(l),1+nn_structure(l-1))*
     ws += (w_size+1);
     disp("Stopped in main loop.");
     keyboard;
