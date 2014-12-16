@@ -1,4 +1,4 @@
-function [response,activation]=nn_feedforward(X,w,nn_structure)
+function [response]=nn_feedforward(X,w,nn_structure)
 % [response,activation]=nn_feedforward(X,w,nn_stucture)
 % Get response of neural network to input X size Mx1
 % w is array of weights to use.
@@ -14,21 +14,17 @@ function [response,activation]=nn_feedforward(X,w,nn_structure)
 
     L = length(nn_structure);
 
-    activation = zeros(sum(nn_structure),1);
     response   = zeros(sum(nn_structure),1);
 
     ai = [0,cumsum(nn_structure)];
     ws = 0;
 
     l=1;
-    activation(1+ai(l):ai(l+1))=X;
     response(1+ai(l):ai(l+1))=X;
 
     for l=2:L
         w_size =  (1+nn_structure(l-1))*nn_structure(l);
-        activation((1+ai(l)):ai(l+1)) = reshape(w((ws+1):(ws+(w_size))),nn_structure(l),1+nn_structure(l-1))*[1;response((1+ai(l-1)):ai(l))];
-
-        response((1+ai(l)):ai(l+1)) = sigmoid(activation((1+ai(l)):ai(l+1)));
+        response((1+ai(l)):ai(l+1)) = sigmoid(reshape(w((ws+1):(ws+(w_size))),nn_structure(l),1+nn_structure(l-1))*[1;response((1+ai(l-1)):ai(l))]);
         ws += w_size;
     end
 end
