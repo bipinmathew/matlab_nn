@@ -22,12 +22,13 @@ function [response,activation]=nn_feedforward(X,w,nn_structure)
 
     l=1;
     activation(1+ai(l):ai(l+1))=X;
+    response(1+ai(l):ai(l+1))=X;
 
     for l=2:L
         w_size =  (1+nn_structure(l-1))*nn_structure(l);
-        activation((1+ai(l)):ai(l+1)) = reshape(w((ws+1):(ws+(w_size))),nn_structure(l),1+nn_structure(l-1))*[1;sigmoid(activation((1+ai(l-1)):ai(l)))];
+        activation((1+ai(l)):ai(l+1)) = reshape(w((ws+1):(ws+(w_size))),nn_structure(l),1+nn_structure(l-1))*[1;response((1+ai(l-1)):ai(l))];
+
+        response((1+ai(l)):ai(l+1)) = sigmoid(activation((1+ai(l)):ai(l+1)));
         ws += w_size;
     end
-    disp("Stopped after feedforward");
-    keyboard;
 end

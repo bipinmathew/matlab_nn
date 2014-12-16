@@ -8,5 +8,6 @@ w = nn_initweights(nn_structure);
 
 for i = 1:M
    [response,activation]=nn_feedforward(X(i,:),w,nn_structure);
+   response
 end
 
