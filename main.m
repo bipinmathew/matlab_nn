@@ -6,5 +6,5 @@ L = length(nn_structure);
 
 w = nn_initweights(nn_structure);
 
-response=nn_feedforward(X(1,:),w,nn_structure)
-
+o=nn_feedforward(X(1,:),w,nn_structure);
+jw = nn_backprop(y,o,nn_structure);
