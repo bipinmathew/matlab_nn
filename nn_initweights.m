@@ -5,5 +5,7 @@ for i=2:L
 	num_weights+=(1+nn_structure(i-1))*nn_structure(i);
 end
 
-w = rand(num_weights,1);
+%w = rand(num_weights,1);
+w = ones(num_weights,1);
+
 end
