@@ -16,7 +16,7 @@ function boldify(h,g)
 if nargin < 1, h = gcf;, end
 
 % Set (and get) the default MATLAB paper size and position
-set(gcf,'PaperPosition','default');
+%set(gcf,'PaperPosition','default');
 units = get(gcf,'PaperUnits');
 set(gcf,'PaperUnits','inches');
 fsize = get(gcf,'PaperPosition');

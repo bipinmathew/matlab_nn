@@ -1,4 +1,4 @@
-function [j,jw] = nn_backprop(y,o,w,nn_structure)
+function [j,jw] = nn_backprop(y,o,w,lambda,nn_structure)
     L = length(nn_structure);    
     [M,N] = size(y);
     d = zeros(sum(nn_structure(2:end)),1);
@@ -11,7 +11,8 @@ function [j,jw] = nn_backprop(y,o,w,nn_structure)
     %disp("Stopped to compute error.");
     %keyboard;
 
-    j = sum(norm(o(:,end-nn_structure(l)+1:end)-y,2,"rows").^2)/(2*M);
+    j = -sum(sum(y.*log(o(:,end-nn_structure(l)+1:end))+(1-y).*log(1-o(:,end-nn_structure(l)+1:end))))/M;
+    j += ((lambda*sum(w.^2))/(2*M));
 
 
     ri = cumsum(nn_structure(end:-1:2));
@@ -20,7 +21,9 @@ function [j,jw] = nn_backprop(y,o,w,nn_structure)
         we = length(w);
         l = L;
         e = length(d);
-        d(end-nn_structure(l)+1:end)=(o(i,end-nn_structure(l)+1:end)-y(i,:)).*(1-o(i,end-nn_structure(l)+1:end)).*o(i,end-nn_structure(l)+1:end);
+        %disp("Stopped in backprop");
+        %keyboard;
+        d(end-nn_structure(l)+1:end)=(o(i,end-nn_structure(l)+1:end)-y(i,:));
 
         for l=(L-1):-1:2
             W=reshape(w(we-(1+nn_structure(l))*(nn_structure(l+1))+1:we),nn_structure(l+1),1+nn_structure(l))'(2:end,:);
@@ -51,5 +54,6 @@ function [j,jw] = nn_backprop(y,o,w,nn_structure)
     end
 
     jw/=M;
+    jw+=lambda*w/M;
 
 end
